@@ -77,8 +77,8 @@ console.log(JSON.stringify(parser.getPolicy(), null, 4));
 }
 */
 
-// Parse to string
-parser.toPolicyString();
+// Parse to string with parser.toPolicyString()
+console.log(parser.toPolicyString());
 /*  Result is
 
     default-src 'self'; script-src 'unsafe-eval' scripts.com added-script.com added-script-2.com added-script-3.com; object-src; style-src example.com
