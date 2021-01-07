@@ -59,7 +59,7 @@ const CspDirectiveValue = Object.freeze({
 const getValuesByDirectiveFn = (policyObject, cspDirective) => {
     const policyEntry = Object.entries(policyObject).find(([k]) => k === cspDirective);
 
-    return policyEntry === null ? null : policyEntry[1];
+    return policyEntry === undefined ? undefined : policyEntry[1];
 };
 
 class CspParser {
@@ -80,18 +80,22 @@ class CspParser {
     }
 
     addValue(cspDirective, ...values) {
-        const foundValues = this.getValuesByDirective(cspDirective);
+        let foundValues = this.getValuesByDirective(cspDirective);
+
+        if (foundValues === undefined) {
+            foundValues = this.policy[cspDirective] = [];
+        }
 
         foundValues.push(...values);
 
         return foundValues;
     }
 
-    addValueOrCreate(cspDirective, value, fallbackDirective = CspDirective.DEFAULT_SRC) {
+    addValueSmart(cspDirective, value, fallbackDirective = CspDirective.DEFAULT_SRC) {
         let currentDirective = cspDirective;
         let policyEntry = this.getValuesByDirective(currentDirective);
 
-        if (policyEntry === null) {
+        if (policyEntry === undefined) {
             currentDirective = fallbackDirective;
             policyEntry = this.getValuesByDirective(currentDirective);
         }
@@ -124,8 +128,8 @@ class CspParser {
     removeValueBase(cspDirective, predicate, ...values) {
         const foundValues = this.getValuesByDirective(cspDirective);
 
-        if (foundValues === null) {
-            return null;
+        if (foundValues === undefined) {
+            return undefined;
         }
 
         values.forEach(value => {
