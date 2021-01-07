@@ -50,7 +50,11 @@ const CspDirectiveValue = Object.freeze({
     NONE: "'none'",
     SELF: "'self'",
     UNSAFE_EVAL: "'unsafe-eval'",
-    UNSAFE_INLINE: "'unsafe-inline'"
+    UNSAFE_INLINE: "'unsafe-inline'",
+    BLOB_URI: 'blob:',
+    DATA_URI: 'data:',
+    FILESYSTEM_URI: 'filesystem:',
+    MEDIASTREAM_URI: 'mediastream:',
 });
 const getValuesByDirectiveFn = (policyObject, cspDirective) => {
     const policyEntry = Object.entries(policyObject).find(([k]) => k === cspDirective);
@@ -98,12 +102,18 @@ class CspParser {
         this.removeValue(currentDirective, CspDirectiveValue.NONE);
 
         if (policyEntryValues.length < 1) {
+            // Allows all by default plus the value
+            // See https://bugzilla.mozilla.org/show_bug.cgi?id=1086999
             this.addValue(
                 currentDirective,
                 CspDirectiveValue.CSP_ALL_WILD_CARD,
                 CspDirectiveValue.SELF,
                 CspDirectiveValue.UNSAFE_EVAL,
                 CspDirectiveValue.UNSAFE_INLINE,
+                CspDirectiveValue.BLOB_URI,
+                CspDirectiveValue.DATA_URI,
+                CspDirectiveValue.FILESYSTEM_URI,
+                CspDirectiveValue.MEDIASTREAM_URI,
                 value
             );
         } else {
