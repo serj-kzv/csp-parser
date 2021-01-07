@@ -105,11 +105,7 @@ class CspParser {
             currentDirective = fallbackDirective;
             policyEntry = this.getValuesByDirective(currentDirective);
         }
-
-        const policyEntryValues = policyEntry[1];
-
-        this.addValue(cspDirective, ...policyEntryValues);
-
+        this.addValue(cspDirective, ...policyEntry[1]);
         if (this.hasValue(currentDirective, CspDirectiveValue.NONE)) {
             this.removeValue(currentDirective, CspDirectiveValue.NONE);
             this.addValue(currentDirective, value);
