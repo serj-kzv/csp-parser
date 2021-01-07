@@ -78,6 +78,40 @@ class CspParser {
         return foundValues;
     }
 
+    addValueOrCreate(cspDirective, value, fallbackDirective = CspDirective.DEFAULT_SRC) {
+        let currentDirective = cspDirective;
+        let policyEntry = Object.entries(this.policy).find(([k]) => k === currentDirective);
+
+        if (policyEntry === null) {
+            currentDirective = fallbackDirective;
+            policyEntry = Object.entries(this.policy).find(([k]) => k === currentDirective);
+        }
+
+        const policyEntryValues = policyEntry[1];
+
+        this.addValue(cspDirective, ...policyEntryValues, value);
+
+        const none = 'none';
+
+        if (value !== none) {
+            this.removeValue(currentDirective, none);
+        }
+
+        if (policyEntryValues.length === 1 && policyEntryValues[0] === none) {
+            if (value !== none) {
+                this.removeValue(currentDirective, none);
+                this.addValue(
+                    currentDirective,
+                    '*',
+                    "'self'",
+                    "'unsafe-eval'",
+                    "'unsafe-inline'",
+                    value
+                );
+            }
+        }
+    }
+
     removeValueBase(cspDirective, predicate, ...values) {
         const foundValues = this.getValuesByDirective(cspDirective);
 
