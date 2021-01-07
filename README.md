@@ -14,7 +14,7 @@ import { CspParser, CspDirective } from "./CspParser.js";
 
 const policy = "default-src 'self'; script-src 'unsafe-eval' scripts.com scripts-that-will-be-removed.com scripts-that-will-be-removed-2.com scripts-that-will-be-removed-starts-with.com scripts-that-will-be-removed-ends-with.com example-to-be-deleted-by-reg-exp.com; object-src; style-src example.com";
 
-const parser = new CspParser(el.value);
+const parser = new CspParser(policy);
  
 // Get object with parser.getPolicy()
 console.log(JSON.stringify(parser.getPolicy(), null, 4));
