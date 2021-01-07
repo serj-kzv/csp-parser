@@ -146,4 +146,4 @@ class CspParser {
 
 }
 
-export {cspParserToObjectFn, cspParserToStringFn, CspDirective, getValuesByDirectiveFn, CspParser};
+export {cspParserToObjectFn, cspParserToStringFn, CspDirective, CspDirectiveValue, getValuesByDirectiveFn, CspParser};
