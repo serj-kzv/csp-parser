@@ -45,8 +45,13 @@ const CspDirective = Object.freeze({
     TRUSTED_TYPES: 'trusted-types',
     UPGRADE_INSECURE_REQUESTS: 'upgrade-insecure-requests',
 });
-const getValuesByDirectiveFn = (policyObject, cspDirective) =>
-    Object.entries(policyObject).find(([k]) => k === cspDirective)[1];
+const getValuesByDirectiveFn = (policyObject, cspDirective) => {
+    try {
+        return Object.entries(policyObject).find(([k]) => k === cspDirective)[1];
+    } catch (ex) {
+        console.error("Can not find a value by a directive name", cspDirective);
+    }
+};
 
 class CspParser {
     constructor(policyString) {
