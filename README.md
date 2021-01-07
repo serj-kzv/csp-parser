@@ -1,4 +1,4 @@
-Simple Content-Security-Policy (CSP) parser written with vanilla JavaScript
+Simple [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) (CSP) parser written with vanilla JavaScript
 
 The parser is without warranty, written not for a production because has no tests.
 
@@ -24,7 +24,7 @@ parser.addValue(
     "added-script-3.com"
 );
 
-// remove values by names ot regular expressions
+// remove values by names or regular expressions
 parser.removeValue(CspDirective.SCRIPT_SRC,
     "scripts-that-will-be-removed.com",
     "scripts-that-will-be-removed-2.com"
