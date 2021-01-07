@@ -79,6 +79,12 @@ class CspParser {
         return getValuesByDirectiveFn(this.policy, cspDirective);
     }
 
+    hasValue(cspDirective, value) {
+        const foundValues = getValuesByDirectiveFn(this.policy, cspDirective);
+
+        return foundValues === undefined ? false : foundValues.some(foundValue => foundValue === value);
+    }
+
     addValue(cspDirective, ...values) {
         let foundValues = this.getValuesByDirective(cspDirective);
 
@@ -103,9 +109,11 @@ class CspParser {
         const policyEntryValues = policyEntry[1];
 
         this.addValue(cspDirective, ...policyEntryValues);
-        this.removeValue(currentDirective, CspDirectiveValue.NONE);
 
-        if (policyEntryValues.length < 1) {
+        if (this.hasValue(currentDirective, CspDirectiveValue.NONE)) {
+            this.removeValue(currentDirective, CspDirectiveValue.NONE);
+            this.addValue(currentDirective, value);
+        } else {
             // Allows all by default plus the value
             // See https://bugzilla.mozilla.org/show_bug.cgi?id=1086999
             this.addValue(
@@ -120,8 +128,6 @@ class CspParser {
                 CspDirectiveValue.MEDIASTREAM_URI,
                 value
             );
-        } else {
-            this.addValue(currentDirective, value);
         }
     }
 
