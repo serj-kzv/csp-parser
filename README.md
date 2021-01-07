@@ -15,6 +15,29 @@ import { CspParser, CspDirective } from "./CspParser.js";
 const policy = "default-src 'self'; script-src 'unsafe-eval' scripts.com scripts-that-will-be-removed.com scripts-that-will-be-removed-2.com scripts-that-will-be-removed-starts-with.com scripts-that-will-be-removed-ends-with.com example-to-be-deleted-by-reg-exp.com; object-src; style-src example.com";
 
 const parser = new CspParser(el.value);
+ 
+// Get object with parser.getPolicy()
+console.log(JSON.stringify(parser.getPolicy(), null, 4));
+/* 
+{
+    "default-src": [
+        "'self'"
+    ],
+    "script-src": [
+        "'unsafe-eval'",
+        "scripts.com",
+        "scripts-that-will-be-removed.com",
+        "scripts-that-will-be-removed-2.com",
+        "scripts-that-will-be-removed-starts-with.com",
+        "scripts-that-will-be-removed-ends-with.com",
+        "example-to-be-deleted-by-reg-exp.com"
+    ],
+    "object-src": [],
+    "style-src": [
+        "example.com"
+    ]
+}
+*/
 
 // add a new value, you can use few values in all form of addValue or removeValue methods
 parser.addValue(
@@ -32,6 +55,27 @@ parser.removeValue(CspDirective.SCRIPT_SRC,
 parser.removeValueStartsWith(CspDirective.SCRIPT_SRC, "scripts-that-will-be-removed-starts-with.com");
 parser.removeValueEndsWith(CspDirective.SCRIPT_SRC, "scripts-that-will-be-removed-ends-with.com");
 parser.removeValueByRegEx(CspDirective.SCRIPT_SRC, /example.+reg-exp.com/);
+
+// Result object is
+console.log(JSON.stringify(parser.getPolicy(), null, 4));
+/*
+{
+    "default-src": [
+        "'self'"
+    ],
+    "script-src": [
+        "'unsafe-eval'",
+        "scripts.com",
+        "added-script.com",
+        "added-script-2.com",
+        "added-script-3.com"
+    ],
+    "object-src": [],
+    "style-src": [
+        "example.com"
+    ]
+}
+*/
 
 // Parse to string
 parser.toPolicyString();
