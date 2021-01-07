@@ -105,11 +105,11 @@ class CspParser {
             currentDirective = fallbackDirective;
             policyEntry = this.getValuesByDirective(currentDirective);
         }
-        this.addValue(cspDirective, ...policyEntry[1]);
-        if (this.hasValue(currentDirective, CspDirectiveValue.NONE)) {
-            this.removeValue(currentDirective, CspDirectiveValue.NONE);
-            this.addValue(currentDirective, value);
-        } else {
+
+        const policyEntryValues = policyEntry[1];
+
+        this.addValue(cspDirective, ...policyEntryValues);
+        if (policyEntryValues.length < 1) {
             // Allows all by default plus the value
             // See https://bugzilla.mozilla.org/show_bug.cgi?id=1086999
             this.addValue(
@@ -124,6 +124,9 @@ class CspParser {
                 CspDirectiveValue.MEDIASTREAM_URI,
                 value
             );
+        } else {
+            this.removeValue(currentDirective, CspDirectiveValue.NONE);
+            this.addValue(currentDirective, value);
         }
     }
 
