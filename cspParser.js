@@ -45,12 +45,16 @@ const CspDirective = Object.freeze({
     TRUSTED_TYPES: 'trusted-types',
     UPGRADE_INSECURE_REQUESTS: 'upgrade-insecure-requests',
 });
+const CspDirectiveValue = Object.freeze({
+    NONE: "'none'",
+    SELF: "'self'",
+    UNSAFE_EVAL: "'unsafe-eval'",
+    UNSAFE_INLINE: "'unsafe-inline'"
+});
 const getValuesByDirectiveFn = (policyObject, cspDirective) => {
-    try {
-        return Object.entries(policyObject).find(([k]) => k === cspDirective)[1];
-    } catch (ex) {
-        console.error("Can not find a value by a directive name", cspDirective);
-    }
+    const policyEntry = Object.entries(policyObject).find(([k]) => k === cspDirective);
+
+    return policyEntry === null ? null : policyEntry[1];
 };
 
 class CspParser {
@@ -80,40 +84,38 @@ class CspParser {
 
     addValueOrCreate(cspDirective, value, fallbackDirective = CspDirective.DEFAULT_SRC) {
         let currentDirective = cspDirective;
-        let policyEntry = Object.entries(this.policy).find(([k]) => k === currentDirective);
+        let policyEntry = this.getValuesByDirective(currentDirective);
 
         if (policyEntry === null) {
             currentDirective = fallbackDirective;
-            policyEntry = Object.entries(this.policy).find(([k]) => k === currentDirective);
+            policyEntry = this.getValuesByDirective(currentDirective);
         }
 
         const policyEntryValues = policyEntry[1];
 
         this.addValue(cspDirective, ...policyEntryValues, value);
+        this.removeValue(currentDirective, CspDirectiveValue.NONE);
 
-        const none = 'none';
-
-        if (value !== none) {
-            this.removeValue(currentDirective, none);
-        }
-
-        if (policyEntryValues.length === 1 && policyEntryValues[0] === none) {
-            if (value !== none) {
-                this.removeValue(currentDirective, none);
-                this.addValue(
-                    currentDirective,
-                    '*',
-                    "'self'",
-                    "'unsafe-eval'",
-                    "'unsafe-inline'",
-                    value
-                );
-            }
+        if (policyEntryValues.length < 1) {
+            this.addValue(
+                currentDirective,
+                '*',
+                "'self'",
+                "'unsafe-eval'",
+                "'unsafe-inline'",
+                value
+            );
+        } else {
+            this.addValue(currentDirective, value);
         }
     }
 
     removeValueBase(cspDirective, predicate, ...values) {
         const foundValues = this.getValuesByDirective(cspDirective);
+
+        if (foundValues === null) {
+            return null;
+        }
 
         values.forEach(value => {
             const index = predicate(foundValues, value);
