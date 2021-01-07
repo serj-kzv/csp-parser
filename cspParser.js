@@ -102,7 +102,7 @@ class CspParser {
 
         const policyEntryValues = policyEntry[1];
 
-        this.addValue(cspDirective, ...policyEntryValues, value);
+        this.addValue(cspDirective, ...policyEntryValues);
         this.removeValue(currentDirective, CspDirectiveValue.NONE);
 
         if (policyEntryValues.length < 1) {
