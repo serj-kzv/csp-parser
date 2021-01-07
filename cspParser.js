@@ -46,7 +46,7 @@ const CspDirective = Object.freeze({
     UPGRADE_INSECURE_REQUESTS: 'upgrade-insecure-requests',
 });
 const CspDirectiveValue = Object.freeze({
-    CSP_ALL_WILD_CARD: "*",
+    ALL_WILD_CARD: "*",
     NONE: "'none'",
     SELF: "'self'",
     UNSAFE_EVAL: "'unsafe-eval'",
@@ -114,7 +114,7 @@ class CspParser {
             // See https://bugzilla.mozilla.org/show_bug.cgi?id=1086999
             this.addValue(
                 currentDirective,
-                CspDirectiveValue.CSP_ALL_WILD_CARD,
+                CspDirectiveValue.ALL_WILD_CARD,
                 CspDirectiveValue.SELF,
                 CspDirectiveValue.UNSAFE_EVAL,
                 CspDirectiveValue.UNSAFE_INLINE,
