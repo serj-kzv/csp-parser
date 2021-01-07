@@ -46,6 +46,7 @@ const CspDirective = Object.freeze({
     UPGRADE_INSECURE_REQUESTS: 'upgrade-insecure-requests',
 });
 const CspDirectiveValue = Object.freeze({
+    CSP_ALL_WILD_CARD: "*",
     NONE: "'none'",
     SELF: "'self'",
     UNSAFE_EVAL: "'unsafe-eval'",
@@ -99,10 +100,10 @@ class CspParser {
         if (policyEntryValues.length < 1) {
             this.addValue(
                 currentDirective,
-                '*',
-                "'self'",
-                "'unsafe-eval'",
-                "'unsafe-inline'",
+                CspDirectiveValue.CSP_ALL_WILD_CARD,
+                CspDirectiveValue.SELF,
+                CspDirectiveValue.UNSAFE_EVAL,
+                CspDirectiveValue.UNSAFE_INLINE,
                 value
             );
         } else {
