@@ -9,7 +9,12 @@ describe('CspParser',  () => {
     });
 
     it('parse to array', () => {
-        let r = cspParser.getPolicy();
-        expect(r[CspDirective.DEFAULT_SRC].length).toEqual(1);
+        let parsedCsp = cspParser.getPolicy();
+        expect(parsedCsp[CspDirective.DEFAULT_SRC].length).toEqual(1);
+        expect(parsedCsp[CspDirective.SCRIPT_SRC].length).toEqual(7);
+        expect(parsedCsp[CspDirective.OBJECT_SRC].length).toEqual(0);
+        expect(parsedCsp[CspDirective.STYLE_SRC].length).toEqual(1);
     });
+
+
 });
