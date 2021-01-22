@@ -1,0 +1,24 @@
+{
+  "name": "csp-parser",
+  "version": "1.0.0",
+  "description": "Simple [Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) (CSP) parser written with vanilla JavaScript",
+  "type": "module",
+  "dependencies": {},
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "jasmine": "^3.6.3"
+  },
+  "scripts": {
+    "test": "node ./jasmine.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serj-kzv/csp-parser.git"
+  },
+  "author": "serj.kzv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/serj-kzv/csp-parser/issues"
+  },
+  "homepage": "https://github.com/serj-kzv/csp-parser#readme"
+}
